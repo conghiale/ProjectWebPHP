@@ -1,0 +1,159 @@
+<!DOCTYPE    html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.2.1/css/all.css">
+    <link rel="stylesheet" href="form-register.css">
+
+    <title>Register</title>
+    <style>
+        span.has-error {
+            color:red;
+            font-size: small;
+        }
+        .showMessage {
+            position: absolute;
+            left: 0;
+            bottom: -100px;
+            width: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0px 0px 17px 2px rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="register">
+        <form class="form-register" method="post" action="" role="form" name="register">
+            <a href="index.php"><img class="img-register" src="index_img/logo.png" alt=""></a>
+            <h2 class="form-heading mt-2">Register</h2>
+            <div class="form-group mb-3 mt-3">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" class="form-input" id="email" name="email" placeholder="conghiale28102002@gmail.com">
+            </div>
+            <div class="form-group mb-3 mt-2">
+                <i class="fa-solid fa-phone"></i>
+                <input type="number" class="form-input" id="phone" name="phone" placeholder="0826611778">
+            </div>
+            <div class="form-group mb-3 mt-2">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" class="form-input" id="user" name="user" placeholder="Conghiale">
+            </div>
+            <div class="form-group mb-3 mt-2">
+                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-eye" id="eye_pass"></i>
+                <input type="password" class="form-input" id="pass" name="pass" placeholder="Password">
+            </div>
+            <div class="form-group mb-5 mt-2">
+                <i class="fa-solid fa-unlock-keyhole"></i>
+                <i class="fa-solid fa-eye" id="eye_confirm_pass"></i>
+                <input type="password" class="form-input" id="confirm_pass" name="confirm_pass" placeholder="Confirm Password">
+            </div>
+            <input class="form-submit" type="submit" value="Register" onclick="checkValid()">
+            <div class='alert alert-success showMessage fade' role='alert'>Please complete all information</div>
+        </form>
+    </div>
+<!--    <div style="display: flex; justify-content: center; align-items: center;">-->
+<!--    </div>-->
+    <script defer>
+        let state, message, showMessage
+        showMessage = $('.showMessage')
+        state = "<?php echo $state ?>"
+        message = "<?php echo $message ?>"
+
+        $(document).ready(function () {
+            if (showMessage.hasClass('fade'))
+                showMessage.removeClass('fade')
+            showMessage.hide()
+            
+            if (state != "")  {
+                if (state == "success") {
+                    if (showMessage.hasClass('alert-danger'))
+                        showMessage.toggleClass('alert-danger alert-success')
+                }else {
+                    if (showMessage.hasClass('alert-success'))
+                        showMessage.toggleClass('alert-success alert-danger')
+                }
+                showMessage.html(message)
+            }
+            showMessage.fadeIn(500)
+            setTimeout(function () {
+                showMessage.fadeOut(1000)
+            }, 3000)
+
+            $('#eye_pass').click(function () {
+                $(this).toggleClass('fa-sharp fa-eye-slash fa-eye open')
+                if($(this).hasClass('open'))
+                    $('#pass').attr('type', 'text')
+                else
+                    $('#pass').attr('type', 'password')
+            })
+
+            $('#eye_confirm_pass').click(function () {
+                $(this).toggleClass('fa-sharp fa-eye-slash fa-eye open')
+                if($(this).hasClass('open'))
+                    $('#confirm_pass').attr('type', 'text')
+                else
+                    $('#confirm_pass').attr('type', 'password')
+            })
+        });
+        $.validator.setDefaults({
+            errorElement: 'span',
+            errorClass: 'has-error',
+        });
+        function checkValid() {
+            console.log("register")
+            $(".form-register").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phone: {
+                        required: true,
+                        number: true
+                    },
+                    user: "required",
+                    pass: {
+                        required: true,
+                        minlength: 6
+                    },
+                    confirm_pass: {
+                        required: true,
+                        minlength: 6,
+                        equalTo: "#pass"
+                    }
+                },
+                messages: {
+                    email: "Please enter a valid email address",
+                    user: "Please enter a valid user name",
+                    phone: {
+                        required: "Please provide a your number",
+                        number: "Invalid phone number",
+                    },
+                    pass: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 6 characters long"
+                    },
+                    confirm_pass: {
+                        required: "Please confirm password",
+                        minlength: "Your password must be at least 6 characters long",
+                        equalTo: "Invalid password"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            })
+        };
+    </script>
+</body>
+</html>
